@@ -1,0 +1,18 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.App-header {
+  font-style: italic;
+  min-width: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-size: calc(2px + 2vmin);
+  backdrop-filter: blur(100px);
+  color: white;
+}
+
+.App-body{
+  min-width: full;
+  display: flex;
+}
