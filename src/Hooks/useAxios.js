@@ -10,7 +10,7 @@ const useAxios = (initialConfig = {}) => {
   axios.defaults.withCredentials = true;
   axios.defaults.withXSRFToken = true;
 
-  const BASE_URL = "https://coldparts.online/api/";
+  const BASE_URL = import.meta.env.VITE_URL_BASE;
 
   const fetchDataRef = useRef(null);
 

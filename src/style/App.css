@@ -13,6 +13,6 @@
 }
 
 .App-body{
-  min-width: full;
+  min-width: 100vh;
   display: flex;
 }

@@ -11,19 +11,20 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
+  const urlSanctum = import.meta.env.VITE_SANCTUM_URL;
+  const urlBase = import.meta.env.VITE_URL_BASE;
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
       // Realizamos la solicitud para obtener el token CSRF
-      await axios.get(`https://coldparts.online/sanctum/csrf-cookie`, {
+      await axios.get(`${urlSanctum}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
 
       // Realizamos la solicitud de inicio de sesión
       const response = await axios.post(
-        `https://coldparts.online/api/login`,
+        `${urlBase}/login`,
         {
           user_name: username,
           password: password,
@@ -33,7 +34,7 @@ export default function Login() {
             "Content-Type": "application/json",
             Accept: "application/json",
           },
-          withCredentials: true, // Aseguramos que las credenciales se envíen
+          withCredentials: true,
         }
       );
       if (response.status !== 200) {
@@ -76,7 +77,7 @@ export default function Login() {
   return (
     <div className="bg-gray-100 rounded-lg py-10 px-4 lg:px-24">
       <ToastContainer />
-      <p className="text-center text-sm bold text-gray-500 font-light">
+      <p className="text-center text-sm bold text-gray-700 font-strong">
         Inicia Sesion para continuar
       </p>
       <form className="mt-6" onSubmit={handleSubmit}>
