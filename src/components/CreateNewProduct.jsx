@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAxios from "../Hooks/useAxios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function CreateNewProduct() {
   const [product, setProduct] = useState({
@@ -28,8 +28,20 @@ export default function CreateNewProduct() {
     const file = e.target.files[0];
     if (file && file.size <= 10 * 1024 * 1024) {
       // 10MB size limit
-      setProduct({ ...product, img_product: file });
-      setImagePreview(URL.createObjectURL(file));
+      if (file.type.match("image/jpeg|image/png|image/jpg|image/gif")) {
+        setProduct({ ...product, img_product: file });
+        setImagePreview(URL.createObjectURL(file));
+      } else {
+        toast.error("El archivo debe ser de tipo jpeg, png, jpg, gif", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
     } else {
       alert("El archivo debe ser una imagen y no debe exceder 10MB");
     }
@@ -48,20 +60,24 @@ export default function CreateNewProduct() {
     }
 
     try {
-      await fetchData({
-        url: "inventario/create",
+      const res = await fetchData({
+        url: "/inventario/create",
         method: "post",
         data: formData,
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
       navigate("/maindashboard/inventario", {
         state: { successMessage: "Producto creado con éxito" },
       });
-    } catch (err) {
-      toast.error(err.message, {
+    } catch (error) {
+      console.log(error);
+      const errorMessage =
+        error.response && error.response.data && error.response.data.error
+          ? Object.values(error.response.data.error).flat().join(", ")
+          : error.message || "Ocurrió un error inesperado";
+      toast.error(errorMessage, {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -72,19 +88,9 @@ export default function CreateNewProduct() {
       });
     }
   };
-  if (error) {
-    toast.error(error, {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  }
   return (
     <div>
+      <ToastContainer />
       <section className="max-w-4xl p-6 mx-auto bg-indigo-600 rounded-md shadow-md dark:bg-gray-800 mt-5">
         <h1 className="text-xl font-bold text-white capitalize dark:text-white">
           Crear producto nuevo

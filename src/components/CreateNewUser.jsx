@@ -16,7 +16,7 @@ export default function CreateNewUser() {
     console.log(formData);
     try {
       await fetchData({
-        url: "users",
+        url: "/users",
         method: "post",
         data: formData,
         headers: {
