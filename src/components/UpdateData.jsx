@@ -21,7 +21,7 @@ export default function UpdateData({ cart, createRecord, invoiceBlob }) {
       let newStock = item.cantidad_stock - item.quantity;
       if (newStock != null) {
         fetchData({
-          url: `inventario-stock/${item.id}`,
+          url: `/inventario-stock/${item.id}`,
           method: "put",
           data: {
             cantidad_stock: newStock,

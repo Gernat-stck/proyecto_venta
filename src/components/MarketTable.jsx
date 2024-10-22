@@ -15,14 +15,14 @@ const MarketTable = ({
         !errorInventory &&
         currentItems.map((item) => (
           <div
-            className="relative flex flex-col md:flex-row md:space-x-4 space-y-3 md:space-y-0 rounded-xl shadow-lg p-3 max-w-xs md:max-w-2xl mx-5 border border-white bg-white"
-            key={item.id}
+          className="relative flex flex-col md:flex-row md:space-x-4 space-y-3 md:space-y-0 rounded-xl shadow-lg p-6 max-w-xs md:max-w-2xl mx-5 border border-white bg-white"
+          key={item.id}
           >
             <div className="w-full md:w-1/3 bg-white grid place-items-center">
-              <img
-                src={`${import.meta.env.VITE_BASE_URL}/${item.img_product}`}
-                alt="tailwind logo"
-                className="rounded-xl"
+            <img
+                src={`${import.meta.env.VITE_SANCTUM_URL}${item.img_product}`}
+                alt="Imagen del producto"
+                className="rounded-xl w-20 h-20"
               />
             </div>
             <div className="w-full md:w-2/3 bg-white flex flex-col space-y-2 p-3">

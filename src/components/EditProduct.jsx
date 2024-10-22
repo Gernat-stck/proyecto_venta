@@ -25,7 +25,7 @@ export default function EditProduct() {
 
     try {
       await fetchData({
-        url: `inventario/search?termino=${productId}&campo=id`,
+        url: `/inventario/search?termino=${productId}&campo=id`,
         method: "GET",
         headers: {
           "Content-Type": "application/json",

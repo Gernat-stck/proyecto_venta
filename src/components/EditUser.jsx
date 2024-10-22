@@ -19,7 +19,7 @@ export default function EditUser() {
     e.preventDefault();
     try {
       await fetchData({
-        url: `users/${userId}`,
+        url: `/users/${userId}`,
         method: "put",
         data: formData,
         headers: {
