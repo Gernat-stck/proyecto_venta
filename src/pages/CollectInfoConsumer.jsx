@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import InvoiceTemplate from "../components/InvoiceTemplate";
 import InvoiceViewer from "../components/InvoiceViewer";
 import UpdateData from "../components/UpdateData";
 import useAuth from "../Hooks/useAuth";
+import useAxios from "../Hooks/useAxios";
 import InfoClientComp from "../components/InfoClientComp";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -27,12 +28,12 @@ const CollectInfoConsumer = () => {
     documento: "",
     email: "",
   });
-
   const [invoiceData, setInvoiceData] = useState(null);
   const [invoiceBlob, setInvoiceBlob] = useState(null);
   const [showForm, setShowForm] = useState(true);
-
+  const { fetchData, error } = useAxios({});
   useAuth();
+
   const handleBlobGenerated = (blob) => {
     setInvoiceBlob(blob);
     setShowForm(false);
@@ -52,6 +53,31 @@ const CollectInfoConsumer = () => {
       total: totalAmount,
     };
     setInvoiceData(updatedClientData);
+    try {
+      const response = await fetchData({
+        url: "invoices",
+        method: "post",
+        data: updatedClientData,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+      if (response) {
+        handleBlobGenerated(response);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error al crear la factura. Por favor, inténtelo de nuevo.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   };
 
   const handleChange = (e) => {
@@ -61,6 +87,7 @@ const CollectInfoConsumer = () => {
       [name]: value,
     });
   };
+
   const handleConfirm = () => {
     setIsConfirmed(true);
   };
