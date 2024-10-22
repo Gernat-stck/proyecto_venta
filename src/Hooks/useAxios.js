@@ -6,12 +6,9 @@ const useAxios = (initialConfig = {}) => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
   axios.defaults.withCredentials = true;
   axios.defaults.withXSRFToken = true;
-
   const BASE_URL = import.meta.env.VITE_URL_BASE;
-
   const fetchDataRef = useRef(null);
 
   const fetchData = useCallback(async (overrideConfig = {}) => {
@@ -35,7 +32,7 @@ const useAxios = (initialConfig = {}) => {
       setResponse(res.data);
       return res; // Asegúrate de devolver la respuesta completa
     } catch (err) {
-      setError(err.message || 'ocurrió un error');
+      setError(err.response ? err.response.data : err.message || 'ocurrió un error');
       console.error(err);
       throw err; // Lanza el error para que pueda ser manejado en el componente
     } finally {
