@@ -36,7 +36,7 @@ export default function Header() {
         <span className="px-2 mr-2 border-r border-gray-800">
           <img
             src={logo}
-            alt="parts frio"
+            alt="logo"
             className="w-15 h-11 inline mx-auto"
           />
         </span>
