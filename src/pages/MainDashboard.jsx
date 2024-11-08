@@ -21,7 +21,7 @@ export default function MainDashboard() {
   }, [navigate]);
 
   return (
-    <div className="p-5 h-90 mb-16 w-3/6 bg-slate-900 text-green-200 rounded-md opacity-60 w-3/8">
+    <div className="p-5 h-90 mb-16 w-3/6 bg-slate-900 text-white rounded-md opacity-60 w-3/8">
       <ToastContainer />
       <h1 className="text-2xl font-bold mb-4 text-center">Panel de control</h1>
       <div className="grid grid-cols-2 gap-4 relative w-90">
