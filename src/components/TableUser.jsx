@@ -1,5 +1,15 @@
 import React from "react";
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { Pencil, Trash2 } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./ui/table";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 import LoadingComponent from "./LoadingComponent";
 
 const TableUser = ({
@@ -9,77 +19,85 @@ const TableUser = ({
   handleEdit,
   handleDelete,
 }) => {
-  if(loadingUsers && currentItems.length === 0){
-    return <LoadingComponent />
+  if (loadingUsers && currentItems.length === 0) {
+    return <LoadingComponent />;
   }
+  if (errorUsers) {
+    return <div className="text-red-500 text-center">{errorUsers}</div>;
+  }
+
   return (
-    <div className="px-3 py-4 flex justify-center">
-      <table className="w-full text-md bg-white shadow-md rounded mb-4">
-        <tbody>
-          <tr className="border-b">
-            <th className="text-left p-3 px-5">Nombre</th>
-            <th className="text-left p-3 px-5">Usuario</th>
-            <th className="text-left p-3 px-5">Contraseña</th>
-            <th className="text-left p-3 px-5">Rol</th>
-            <th></th>
-          </tr>
-          {!loadingUsers &&
-            !errorUsers &&
-            currentItems.map((user) => (
-              <tr
-                key={user.id}
-                className="border-b hover:bg-orange-100 bg-gray-100"
-              >
-                <td className="p-3 px-5">
-                  <input
+    <div className="container mx-auto py-10">
+      <div className="bg-white shadow-md rounded-lg p-6">
+        <Table className="w-full">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nombre</TableHead>
+              <TableHead>Usuario</TableHead>
+              <TableHead>Contraseña</TableHead>
+              <TableHead>Rol</TableHead>
+              <TableHead className="text-right">Acciones</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {currentItems.map((user) => (
+              <TableRow key={user.id} className="hover:bg-gray-100">
+                <TableCell>
+                  <Input
                     type="text"
                     defaultValue={user.name}
                     className="bg-transparent"
-                    disabled
+                    readOnly
                   />
-                </td>
-                <td className="p-3 px-5">
-                  <input
+                </TableCell>
+                <TableCell>
+                  <Input
                     type="text"
                     defaultValue={user.user_name}
                     className="bg-transparent"
+                    readOnly
                   />
-                </td>
-                <td className="p-3 px-5">
-                  <input
+                </TableCell>
+                <TableCell>
+                  <Input
                     type="password"
                     defaultValue="password"
                     className="bg-transparent"
-                    max={8}
-                    disabled
+                    readOnly
                   />
-                </td>
-                <td className="p-3 px-5">
-                  <input
+                </TableCell>
+                <TableCell>
+                  <Input
                     type="text"
                     defaultValue={user.rol}
                     className="bg-transparent"
-                    disabled
+                    readOnly
                   />
-                </td>
-                <td>
-                  <button
+                </TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    variant="outline"
+                    size="icon"
                     onClick={() => handleEdit(user.id)}
-                    className="text-sm bg-blue-500 hover:bg-blue-800 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outliine mr-5"
+                    className="mr-2"
                   >
-                    <PencilSquareIcon className="w-6 h-6" />
-                  </button>
-                  <button
+                    <Pencil className="h-4 w-4" />
+                    <span className="sr-only">Edit</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
                     onClick={() => handleDelete(user.id)}
-                    className="text-sm mr-4 bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
                   >
-                    <TrashIcon className="w-6 h-6" />
-                  </button>
-                </td>
-              </tr>
+                    <Trash2 className="h-4 w-4" />
+                    <span className="sr-only">Delete</span>
+                  </Button>
+                </TableCell>
+              </TableRow>
             ))}
-        </tbody>
-      </table>
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };

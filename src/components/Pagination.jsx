@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "./ui/button";
 
 const Pagination = ({ totalItems, itemsPerPage, currentPage, paginate }) => {
   const pageNumbers = [];
@@ -12,16 +13,16 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, paginate }) => {
       <ul className="flex">
         {pageNumbers.map((number) => (
           <li key={number} className="mx-1">
-            <button
+            <Button
               onClick={() => paginate(number)}
               className={`${
                 currentPage === number
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-300 text-gray-700"
-              } px-4 py-2 rounded-md transition duration-300 ease-in-out hover:bg-blue-700`}
+                  ? "bg-indigo-500 text-white"
+                  : "bg-indigo-200 text-gray-700"
+              } px-4 py-2 rounded-md transition duration-300 ease-in-out hover:bg-indigo-700`}
             >
               {number}
-            </button>
+            </Button>
           </li>
         ))}
       </ul>

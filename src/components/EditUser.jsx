@@ -3,6 +3,18 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
 import useAxios from "../Hooks/useAxios";
 import useAuth from "./../Hooks/useAuth";
+import { User } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Button } from "../components/ui/button";
+
 export default function EditUser() {
   const [formData, setFormData] = useState({
     name: "",
@@ -15,6 +27,7 @@ export default function EditUser() {
   const userId = location.state?.userId;
   const { fetchData, error, response } = useAxios({});
   useAuth();
+  
   const handleConfirmUser = async (e) => {
     e.preventDefault();
     try {
@@ -37,7 +50,8 @@ export default function EditUser() {
       toast.error(error);
     }
   };
-  const handleChange = async (e) => {
+  
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -68,114 +82,92 @@ export default function EditUser() {
       progress: undefined,
     });
   }
+
   return (
     <div className="bg-transparent flex items-center justify-center w-screen h-screen">
       <ToastContainer />
-      <div className="bg-white p-5 rounded-lg shadow-lg max-w-sm w-full">
-        <div className="flex justify-center mb-6">
-          <span className="inline-block bg-gray-200 rounded-full p-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="currentColor"
-                d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"
+      <Card className="bg-white p-5 rounded-lg shadow-lg max-w-sm w-full">
+        <CardHeader className="text-center">
+        <div className="flex justify-center mb-4">
+            <span className="inline-block bg-gray-200 rounded-full p-3">
+              <User className="w-6 h-6 text-gray-600" />
+            </span>
+          </div>
+          <CardTitle className="text-2xl font-semibold">Actualizar usuario</CardTitle>
+          <CardDescription className="text-gray-600 mb-6">Ingresa los detalles del registro.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleConfirmUser}>
+            <div className="mb-4">
+              <Label htmlFor="name" className="block text-sm font-semibold mb-2 text-gray-700">Nombre Completo *</Label>
+              <Input
+                id="name"
+                name="name"
+                type="text"
+                required
+                placeholder="James Brown"
+                className="w-full"
+                onChange={handleChange}
               />
-            </svg>
-          </span>
-        </div>
-        <h2 className="text-2xl font-semibold text-center mb-4">
-          Actualizar usuario
-        </h2>
-        <p className="text-gray-600 text-center mb-6">
-          Ingresa los detalles del registro.
-        </p>
-        <form onSubmit={handleConfirmUser}>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-semibold mb-2">
-              Nombre Completo *
-            </label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500"
-              required
-              placeholder="James Brown"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-semibold mb-2">
-              Usuario *
-            </label>
-            <input
-              type="username"
-              id="username"
-              name="user_name"
-              className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500"
-              required
-              placeholder="Usuario"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-semibold mb-2">
-              Contraseña *
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500"
-              required
-              placeholder="••••••••"
-              name="password"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              className="block text-gray-700 text-sm font-semibold mb-2"
-              onChange={handleChange}
-            >
-              Rol *
-            </label>
-            <select
-              name="selectedRol"
-              className="w-full pl-2 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-              onChange={handleSelectChange}
-            >
-              <option value="">Seleccione un rol</option>
-              <option value="admin">Administrador</option>
-              <option value="Operador de Produccion">
-                Operador de Produccion
-              </option>
-              <option value="Supervisor de Inventario">
-                Supervisor de Inventario
-              </option>
-              <option value="Operador de caja">Operador de caja</option>
-            </select>
-          </div>
-          <div className="flex justify-between">
-            <button
-              type="submit"
-              className="w-full mb-3 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-            >
-              Actualizar
-            </button>
-            <button
-              onClick={handleCancel}
-              type="back"
-              className="w-full mb-3 ml-5    bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
-            >
-              Cancelar
-            </button>
-          </div>
-        </form>
-      </div>
+            </div>
+            <div className="mb-4">
+              <Label htmlFor="user_name" className="block text-sm font-semibold mb-2 text-gray-700">Usuario *</Label>
+              <Input
+                id="user_name"
+                name="user_name"
+                type="text"
+                required
+                placeholder="Usuario"
+                className="w-full"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="mb-4">
+              <Label htmlFor="password" className="block text-sm font-semibold mb-2 text-gray-700">Contraseña *</Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                required
+                placeholder="••••••••"
+                className="w-full"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="mb-6">
+              <Label htmlFor="rol" className="block text-sm font-semibold mb-2 text-gray-700">Rol *</Label>
+              <select
+                id="rol"
+                name="rol"
+                required
+                className="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500"
+                onChange={handleSelectChange}
+              >
+                <option value="">Seleccione un rol</option>
+                <option value="admin">Administrador</option>
+                <option value="Operador de Producción">Operador de Producción</option>
+                <option value="Supervisor de Inventario">Supervisor de Inventario</option>
+                <option value="Operador de caja">Operador de caja</option>
+              </select>
+            </div>
+            <div className="flex justify-between">
+              <Button
+                type="submit"
+                className="w-full mb-3 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+              >
+                Actualizar
+              </Button>
+              <Button
+                onClick={handleCancel}
+                type="button"
+                className="w-full mb-3 ml-5 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+              >
+                Cancelar
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

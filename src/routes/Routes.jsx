@@ -6,7 +6,6 @@ import {
   Navigate,
   useNavigate,
 } from "react-router-dom";
-import "../style/App.css";
 import PropTypes from "prop-types";
 import Header from "./../components/Header";
 import Login from "../pages/Login";
@@ -43,10 +42,10 @@ ProtectedComponent.propTypes = {
 function RoutesComp() {
   return (
     <Router className="flex flex-col overflow-x-hidden overflow-auto">
-      <header className="App-header bg-white">
+      <header className="bg-white">
         <Header />
       </header>
-      <div className="App-body bg-slate-700 p-8">
+      <div className="flex items-center justify-center min-h-screen bg-slate-700 p-8">
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} exactpath />

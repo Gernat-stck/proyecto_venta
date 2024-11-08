@@ -8,6 +8,7 @@ import useAuth from "../Hooks/useAuth";
 import useAxios from "../Hooks/useAxios";
 import InfoClientComp from "../components/InfoClientComp";
 import "react-toastify/dist/ReactToastify.css";
+import { sub } from "date-fns";
 
 const CollectInfoConsumer = () => {
   const navigate = useNavigate();
@@ -50,12 +51,14 @@ const CollectInfoConsumer = () => {
       documento: formData.documento,
       registro_num: formData.registro_num,
       cart: cart,
+      subtotal: totalAmount,
+      iva: totalAmount * 0.13,
       total: totalAmount,
     };
     setInvoiceData(updatedClientData);
     try {
       const response = await fetchData({
-        url: "invoices",
+        url: "/invoices",
         method: "post",
         data: updatedClientData,
         headers: {
@@ -97,14 +100,16 @@ const CollectInfoConsumer = () => {
   };
 
   return (
-    <div className="bg-transparent flex items-center justify-center w-full h-screen -mt-20">
+    <div className="flex items-normal justify-center w-full h-full">
       <ToastContainer />
       {showForm ? (
+        <div className="h-[50%]">
         <InfoClientComp
           handleChange={handleChange}
           handleSubmit={handleSubmit}
           handleCancel={handleCancel}
         />
+        </div>
       ) : (
         invoiceBlob && (
           <div className="w-[50%]">

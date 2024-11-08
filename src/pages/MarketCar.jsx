@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import useAuth from "../Hooks/useAuth";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function MarketCar() {
   const location = useLocation();
@@ -9,7 +10,7 @@ export default function MarketCar() {
   const { cart: initialCart } = location.state || { cart: [] };
   const [cart, setCart] = useState(initialCart);
 
-useAuth();
+  useAuth();
 
   const handleRemoveProduct = (productId) => {
     setCart(cart.filter((item) => item.id !== productId));
@@ -34,6 +35,23 @@ useAuth();
   };
 
   const handleNavigate = () => {
+    console.log(cart);
+    cart;
+    if (!cart || cart.length === 0) {
+      toast.error("No hay productos para facturar, revisa el carrito", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setTimeout(() => {
+        navigate(-1);
+      }, 3000);
+      return;
+    }
     navigate("/maindashboard/facturacion/generacionfactura", {
       state: { cart, totalAmount },
     });
@@ -45,6 +63,7 @@ useAuth();
   );
   return (
     <div className="w-full">
+      <ToastContainer />
       <div className="w-3/4 mx-auto text-gray-900 bg-transparent content-center mt-5">
         <div className="flex justify-between space-y-2">
           <h1 className="ml-20 font-serif text-3xl text-white">

@@ -7,6 +7,7 @@ import Pagination from "../components/Pagination";
 import InventoryTable from "./../components/InventoryTable";
 import SearchBar from "../components/SearchBar";
 import useAuth from "../Hooks/useAuth";
+import { Button } from "../components/ui/button";
 
 export default function Inventory() {
   const [products, setProducts] = useState([]);
@@ -125,13 +126,13 @@ export default function Inventory() {
       <SearchBar onSearch={handleSearch} />
       <div className="text-gray-900 bg-transparent content-center mt-7">
         <div className="flex justify-between space-y-2">
-          <h1 className="text-3xl text-white">Inventario</h1>
-          <button
-            onClick={() => navigate("/maindashboard/inventario/create-product")}
-            className="text-sm bg-green-500 hover:bg-green-700 text-white py-2 px-2 rounded focus:outline-none focus:shadow-outline"
+          <h1 className="text-3xl text-white">Inventario</h1> 
+          <Button
+            className="text-sm mr-3 bg-lime-700 hover:bg-lime-800 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline"
+              onClick={() => navigate("/maindashboard/inventario/create-product")}
           >
             Agregar Nuevo Item
-          </button>
+          </Button>
         </div>
         <InventoryTable
           loadingInventory={loadingProducts}

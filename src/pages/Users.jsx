@@ -6,6 +6,7 @@ import useDeleteRequest from "../Hooks/useDeleteRequest";
 import Pagination from "../components/Pagination";
 import TableUser from "../components/TableUser";
 import useAuth from "../Hooks/useAuth";
+import { Button } from "../components/ui/button";
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -124,15 +125,15 @@ function Users() {
   return (
     <div>
       <ToastContainer />
-      <div className="text-gray-900 bg-transparent ">
-        <div className="p-4 flex justify-between">
+      <div className="container mx-auto bg-transparent ">
+        <div className="px-10 flex justify-between">
           <h1 className="text-3xl text-white font-bold">Usuarios</h1>
-          <button
-            className="text-md mr-3 bg-green-500 hover:bg-green-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline"
+          <Button
+            className="text-md mr-3 bg-lime-700 hover:bg-lime-800 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline"
             onClick={() => navigate("/maindashboard/usuarios/createuser")}
           >
             Agregar Usuario
-          </button>
+          </Button>
         </div>
         <TableUser
           loadingUsers={loadingUsers}

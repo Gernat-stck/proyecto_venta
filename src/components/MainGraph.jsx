@@ -32,7 +32,7 @@ export default function Dashboard() {
     const getSalesData = async () => {
       try {
         const response = await fetchData({
-          url: "/sales",
+          url: "/invoices",
           method: "get",
         });
         setSales(response.data);
