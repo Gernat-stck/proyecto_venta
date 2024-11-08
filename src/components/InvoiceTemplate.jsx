@@ -208,7 +208,7 @@ const InvoiceTemplate = ({ data, onBlobGenerated }) => {
 
       generatePdf();
     }
-  }, [data]);
+  }, [data, onBlobGenerated]);
 
   return null;
 };

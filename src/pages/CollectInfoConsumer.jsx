@@ -8,7 +8,6 @@ import useAuth from "../Hooks/useAuth";
 import useAxios from "../Hooks/useAxios";
 import InfoClientComp from "../components/InfoClientComp";
 import "react-toastify/dist/ReactToastify.css";
-import { sub } from "date-fns";
 
 const CollectInfoConsumer = () => {
   const navigate = useNavigate();
@@ -37,10 +36,9 @@ const CollectInfoConsumer = () => {
 
   const handleBlobGenerated = (blob) => {
     setInvoiceBlob(blob);
-    setShowForm(false);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const updatedClientData = {
       nombre_cliente: `${formData.nombre} ${formData.apellido}`,
@@ -56,18 +54,35 @@ const CollectInfoConsumer = () => {
       total: totalAmount,
     };
     setInvoiceData(updatedClientData);
+    setShowForm(false); // Muestra InvoiceTemplate
+  };
+
+  const handleSendInvoice = async () => {
+    if (!invoiceBlob) {
+      toast.error("Error al generar el PDF. Por favor, inténtelo de nuevo.");
+      return;
+    }
+
+    const formDataToSend = new FormData();
+
+    for (const key in invoiceData) {
+      formDataToSend.append(key, invoiceData[key]);
+    }
+
+    formDataToSend.append("factura", invoiceBlob, "factura.pdf");
+
     try {
       const response = await fetchData({
         url: "/invoices",
         method: "post",
-        data: updatedClientData,
+        data: formDataToSend,
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Accept: "application/json",
         },
       });
       if (response) {
-        handleBlobGenerated(response);
+        setIsConfirmed(true);
       }
     } catch (error) {
       console.log(error);
@@ -92,7 +107,7 @@ const CollectInfoConsumer = () => {
   };
 
   const handleConfirm = () => {
-    setIsConfirmed(true);
+    handleSendInvoice(); // Llama a la función para enviar el PDF y datos
   };
 
   const handleCancel = () => {
@@ -104,66 +119,65 @@ const CollectInfoConsumer = () => {
       <ToastContainer />
       {showForm ? (
         <div className="h-[50%]">
-        <InfoClientComp
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          handleCancel={handleCancel}
-        />
+          <InfoClientComp
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            handleCancel={handleCancel}
+          />
+        </div>
+      ) : invoiceBlob ? (
+        <div className="w-[50%]">
+          <InvoiceViewer blob={invoiceBlob} />
+          <div className="flex justify-center mt-2">
+            {!isConfirmed ? (
+              <div className="flex justify-center">
+                <button
+                  onClick={handleConfirm}
+                  className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 mr-5"
+                >
+                  Confirmar Datos
+                </button>
+                <button
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowForm(true);
+                  }}
+                >
+                  Cancelar
+                </button>
+              </div>
+            ) : (
+              <>
+                <UpdateData
+                  cart={cart}
+                  createRecord={invoiceData}
+                  invoiceBlob={invoiceBlob}
+                />
+                <a
+                  href={URL.createObjectURL(invoiceBlob)}
+                  download={`${formData.nombre}_${formData.apellido}.pdf`}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 mr-5"
+                >
+                  Descargar PDF
+                </a>
+                <button
+                  onClick={handleCancel}
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                >
+                  Nueva compra!
+                </button>
+              </>
+            )}
+          </div>
         </div>
       ) : (
-        invoiceBlob && (
-          <div className="w-[50%]">
-            <InvoiceViewer blob={invoiceBlob} />
-            <div className="flex justify-center mt-2">
-              {!isConfirmed ? (
-                <div className="flex justify-center">
-                  <button
-                    onClick={handleConfirm}
-                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 mr-5"
-                  >
-                    Confirmar Datos
-                  </button>
-                  <button
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShowForm(true);
-                    }}
-                  >
-                    Cancelar
-                  </button>
-                </div>
-              ) : (
-                <>
-                  <UpdateData
-                    cart={cart}
-                    createRecord={invoiceData}
-                    invoiceBlob={invoiceBlob}
-                  />
-                  <a
-                    href={URL.createObjectURL(invoiceBlob)}
-                    download={`${formData.nombre}_${formData.apellido}.pdf`}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 mr-5"
-                  >
-                    Descargar PDF
-                  </a>
-                  <button
-                    onClick={handleCancel}
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700"
-                  >
-                    Nueva compra!
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
+        invoiceData && (
+          <InvoiceTemplate
+            data={invoiceData}
+            onBlobGenerated={handleBlobGenerated}
+          />
         )
-      )}
-      {invoiceData && (
-        <InvoiceTemplate
-          data={invoiceData}
-          onBlobGenerated={handleBlobGenerated}
-        />
       )}
     </div>
   );
