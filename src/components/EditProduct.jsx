@@ -71,7 +71,7 @@ export default function EditProduct() {
     }
     try {
       await fetchData({
-        url: `inventario/${product.id}`,
+        url: `/inventario/${product.id}`,
         method: "post",
         data: formData,
       });
